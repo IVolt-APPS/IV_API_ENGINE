@@ -21,13 +21,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\IV_APPS\IV_Plugin_Engine\IV_Plugin_Engine_LIB\IV_Plugin_Engine_LIB.csproj" />
+    <ProjectReference Include="..\IV_Plugin_Engine_LIB\IV_Plugin_Engine_LIB.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="Resources\Data\JSON_Templates\IV_CLI_Menu_System\IV_MenuSystem_Data.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="IVolt.Core.UI.NativeWindowsHelpers" />
   </ItemGroup>
 
 </Project>

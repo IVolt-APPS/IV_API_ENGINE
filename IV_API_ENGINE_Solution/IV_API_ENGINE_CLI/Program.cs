@@ -60,6 +60,14 @@ namespace IVolt.API.Engine.CLI
 			//////////////////////////////////////////////////////////////////////////////////////////
 			static void Main(string[] args)
 			{
+				/*
+				var _x = NativeInputBox.ShowTextInput("Enter A Name", "Please", "New Guy");
+				var _xx = NativeInputBox.ShowYesNoDialog("Are you sure?", "Please");
+
+				Console.ReadKey();
+				return;
+				  */
+
 				if (args.Length == 2)
 				{
 					if (args[1].ToLower().EndsWith(".json"))

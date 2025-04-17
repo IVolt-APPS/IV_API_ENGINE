@@ -114,17 +114,18 @@ namespace IVolt.API.Engine
 		{
 			if (json.StartsWith("{") == false)
 			{
-				_ProtectedFile = false; 
-				
-				
-				throw new Exception("The file is not Encrypted and will not be allowed.  We will protect the json file and restart the process.  We will wait 5 seconds.  If you do not want this to happen close the application");
-				return null;
+				_ProtectedFile = false;
+				var _xx = NativeInputBox.ShowYesNoDialog("Yes to Encrypt and Restart No to Just Exit.", "Encrypt File?");
+
+
+				throw new Exception("The file is not Encrypted and will not be allowed.  ");
+		
 			}
 			
 			var _tmpReturn = JsonConvert.DeserializeObject<IV_CLI_Menu_Engine>(json, Converter.Settings);
 
 
-
+			return _tmpReturn;
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Converts this object to a JSON. </summary>

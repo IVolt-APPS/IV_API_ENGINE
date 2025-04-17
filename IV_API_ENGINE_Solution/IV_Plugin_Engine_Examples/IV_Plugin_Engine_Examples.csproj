@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\IV_APPS\IV_Plugin_Engine\IV_Plugin_Engine_LIB\IV_Plugin_Engine_LIB.csproj" />
+    <ProjectReference Include="..\IV_Plugin_Engine_LIB\IV_Plugin_Engine_LIB.csproj" />
   </ItemGroup>
 
 </Project>

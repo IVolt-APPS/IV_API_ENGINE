@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <RootNamespace>IVolt.Apps.PluginEngine</RootNamespace>
+    <BaseOutputPath>N:\IVolt__Releases\IV_APPS\IV_Plugin_Engine\$(Platform)\$(Configuration)\</BaseOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\Plugins\" />
+  </ItemGroup>
+
+</Project>
