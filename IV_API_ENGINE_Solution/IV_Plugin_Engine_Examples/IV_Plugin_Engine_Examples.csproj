@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <AssemblyName>I_IV_Plugin</AssemblyName>
+    <RootNamespace>IVolt.Examples.PluginEngine</RootNamespace>
+    <BaseOutputPath>N:\IVolt__Releases\IV_APPS\IV_Plugin_Engine_Examples\$(Platform)\$(Configuration)\</BaseOutputPath>
+    <ApplicationIcon>V1_1.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="V1_1.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\IV_APPS\IV_Plugin_Engine\IV_Plugin_Engine_LIB\IV_Plugin_Engine_LIB.csproj" />
+  </ItemGroup>
+
+</Project>

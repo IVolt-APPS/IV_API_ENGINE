@@ -1,0 +1,294 @@
+﻿
+
+using System;
+using System.Collections.Generic;
+
+using System.Globalization;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace IVolt.API.Engine
+{
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	An iv CLI menu item. </summary>
+	///
+	/// <remarks>	Markalicz, 4/15/2025. </remarks>
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	public partial class IV_CLI_Menu_Engine
+	{
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets by level and text. </summary>
+		///
+		/// <remarks>	Markalicz, 4/15/2025. </remarks>
+		///
+		/// <param name="Lvl">	The level. </param>
+		/// <param name="txt">	The text. </param>
+		///
+		/// <returns>	The by level and text. </returns>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		public IvCliMenuItemMenuitem GetByLevelAndText(int Lvl, string txt)
+		{
+			var level = Menulevels.FirstOrDefault(l => l.Mnulevel == Lvl);
+			if (level == null)
+			{
+				Console.WriteLine("Strange Error - Invalid menu level.");
+				Environment.Exit(-1);
+			}
+			var items = level.Menuitems
+				 .OrderBy(mi => mi.Displayorder)
+				 .Select(refItem => Menuitems.FirstOrDefault(item => item.Id == refItem.Mnuid))
+				 .Where(item => item != null)
+				 .ToList();
+			return items.FirstOrDefault(i => i.Shorttext.Equals(txt, StringComparison.OrdinalIgnoreCase));
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets a value indicating whether the continue. </summary>
+		///
+		/// <value>	True if continue, false if not. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		public bool Continue { get; set; } = true;
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Draws. </summary>
+		///
+		/// <remarks>	Markalicz, 4/15/2025. </remarks>
+		///
+		/// <param name="ActiveMenu">		  	The active menu. </param>
+		/// <param name="CurrentMenuLevel">	(Optional) The current menu level. </param>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		public void Draw(IV_CLI_Menu_Engine ActiveMenu, int CurrentMenuLevel = 1)
+		{
+			// Find the current menu level
+			var level = ActiveMenu.Menulevels.FirstOrDefault(l => l.Mnulevel == CurrentMenuLevel);
+			if (level == null)
+			{
+				Console.WriteLine("Invalid menu level."); Console.ReadKey();
+				return;
+			}
+
+			Console.WriteLine($"--- Menu Level {CurrentMenuLevel} ---");
+
+			// Get menu item definitions matching this level
+			var items = level.Menuitems
+				 .OrderBy(mi => mi.Displayorder)
+				 .Select(refItem => ActiveMenu.Menuitems.FirstOrDefault(item => item.Id == refItem.Mnuid))
+				 .Where(item => item != null)
+				 .ToList();
+
+			foreach (var item in items)
+			{
+				// Display the menu option
+				Console.WriteLine($"{item.Shorttext} - {item.Longtext}");
+
+				// Check for jump to level -1
+				if (item.Jumptomenulevel == "-1")
+				{
+					Continue = false;
+				}
+			}
+
+
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the version. </summary>
+		///
+		/// <value>	The version. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+
+		static bool _ProtectedFile = false;
+
+		internal bool AmIProtected
+		{
+			get { return _ProtectedFile; }
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Creates a new object from the given JSON. </summary>
+		///
+		/// <remarks>	Markalicz, 4/15/2025. </remarks>
+		///
+		/// <param name="json">	The JSON. </param>
+		///
+		/// <returns>	An IvCliMenuItem. </returns>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		public static IV_CLI_Menu_Engine FromJson(string json)
+		{
+			if (json.StartsWith("{") == false)
+			{
+				_ProtectedFile = false; 
+				
+				
+				throw new Exception("The file is not Encrypted and will not be allowed.  We will protect the json file and restart the process.  We will wait 5 seconds.  If you do not want this to happen close the application");
+				return null;
+			}
+			
+			var _tmpReturn = JsonConvert.DeserializeObject<IV_CLI_Menu_Engine>(json, Converter.Settings);
+
+
+
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Converts this object to a JSON. </summary>
+		///
+		/// <remarks>	Markalicz, 4/15/2025. </remarks>
+		///
+		/// <returns>	This object as a string. </returns>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		public string ToJson() => JsonConvert.SerializeObject(this, Converter.Settings);
+	}
+
+	public partial class IV_CLI_Menu_Engine
+	{
+		[JsonProperty("version")]
+		public string Version { get; set; }
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the author. </summary>
+		///
+		/// <value>	The author. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("author")]
+		public string Author { get; set; }
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the website. </summary>
+		///
+		/// <value>	The website. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("website")]
+		public Uri Website { get; set; }
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the menulevels. </summary>
+		///
+		/// <value>	The menulevels. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("menulevels")]
+		public List<Menulevel> Menulevels { get; set; }
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the menuitems. </summary>
+		///
+		/// <value>	The menuitems. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("menuitems")]
+		public List<IvCliMenuItemMenuitem> Menuitems { get; set; }
+
+
+
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	An iv CLI menu item menuitem. </summary>
+	///
+	/// <remarks>	Markalicz, 4/15/2025. </remarks>
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	public class IvCliMenuItemMenuitem
+	{
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the identifier. </summary>
+		///
+		/// <value>	The identifier. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("id")]
+		public string Id { get; set; }
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the shorttext. </summary>
+		///
+		/// <value>	The shorttext. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("shorttext")]
+		public string Shorttext { get; set; }
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the longtext. </summary>
+		///
+		/// <value>	The longtext. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("longtext")]
+		public string Longtext { get; set; }
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the jumptomenulevel. </summary>
+		///
+		/// <value>	The jumptomenulevel. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("jumptomenulevel")]
+		public string Jumptomenulevel { get; set; }
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the defaultdisplayorder. </summary>
+		///
+		/// <value>	The defaultdisplayorder. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("defaultdisplayorder")]
+		public long Defaultdisplayorder { get; set; }
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the requirementcheck. </summary>
+		///
+		/// <value>	The requirementcheck. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("requirementcheck")]
+		public string Requirementcheck { get; set; }
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the name of the function. </summary>
+		///
+		/// <value>	The name of the function. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("functionName")]
+		public string FunctionName { get; set; }
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	A menulevel. </summary>
+	///
+	/// <remarks>	Markalicz, 4/15/2025. </remarks>
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	public class Menulevel
+	{
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the mnulevel. </summary>
+		///
+		/// <value>	The mnulevel. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("mnulevel")]
+		public long Mnulevel { get; set; }
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the menuitems. </summary>
+		///
+		/// <value>	The menuitems. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("menuitems")]
+		public List<MenulevelMenuitem> Menuitems { get; set; }
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	A menulevel menuitem. </summary>
+	///
+	/// <remarks>	Markalicz, 4/15/2025. </remarks>
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	public class MenulevelMenuitem
+	{
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the mnuid. </summary>
+		///
+		/// <value>	The mnuid. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("mnuid")]
+		public string Mnuid { get; set; }
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Gets or sets the displayorder. </summary>
+		///
+		/// <value>	The displayorder. </value>
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		[JsonProperty("displayorder")]
+		public long Displayorder { get; set; }
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	A converter. </summary>
+	///
+	/// <remarks>	Markalicz, 4/15/2025. </remarks>
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	internal static class Converter
+	{
+		/// <summary>	(Immutable) options for controlling the operation. </summary>
+		public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+		{
+			MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
+			DateParseHandling = DateParseHandling.None,
+			Converters =
+				{
+					 new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+				},
+		};
+	}
+}

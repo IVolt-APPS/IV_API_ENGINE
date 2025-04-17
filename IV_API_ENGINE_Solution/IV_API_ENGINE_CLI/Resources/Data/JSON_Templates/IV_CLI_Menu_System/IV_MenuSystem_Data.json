@@ -1,0 +1,162 @@
+{
+   "version": "1.1.4",
+   "author": "IVolt,LLC >> MarkAlicz",
+   "website": "https://www.ivolt.io",
+   "security": {
+      "securityplugin": "IV_Base_Security.dll",
+      "rootpassword": "482187",
+      "domain": "ivolt",
+      "admin_users": [ "markalicz" ],
+      "user_list": [
+         {
+            "username": "guest",
+            "password": "1282579782",
+            "restricted_menu_ids": [
+               "exportdata"
+            ]
+         }
+      ]
+   },
+   "menulevels": [
+      {
+         "menulevel": 1,
+         "menuitems": [
+            {
+               "menuid": "apifuncs",
+               "displayorder": 1111
+            },
+            {
+               "menuid": "editmenuadmin",
+               "displayorder": 2222
+            },
+            {
+               "menuid": "versionmenuitem",
+               "displayorder": 5555
+
+            },
+            {
+               "menuid": "hlpmnuitem",
+               "displayorder": 7777
+            }
+         ]
+      },
+      {
+         "menulevel": 2,
+         "menuitems": [
+            {
+               "menuid": "apilist",
+               "displayorder": 1111
+            },
+            {
+               "menuid": "setactiveplugin",
+               "displayorder": 2222
+            },
+            {
+               "menuid": "runactiveplugin",
+               "displayorder": 3333
+            },
+            {
+               "menuid": "moveback",
+               "displayorder": 9999
+            }
+         ]
+      }
+   ],
+   "menuitems": [
+      {
+         "id": "moveback",
+         "shorttext": "back",
+         "longtext": "back",
+         "jumptomenulevel": "[menuid]-1",
+         "defaultdisplayorder": 9999,
+         "requirementcheck": "CheckMenuLevel([menuid])",
+         "functionName": "",
+         "helptextorfile": "Move Back One Menu Level"
+
+      },
+      {
+         "id": "apifuncs",
+         "shorttext": "api",
+         "longtext": "api funcs",
+         "jumptomenulevel": "2",
+         "defaultdisplayorder": 111,
+         "requirementcheck": "CheckAPIList()",
+         "functionName": "",
+         "helptextorfile": "List all available APIs"
+
+      },
+      {
+         "id": "apilist",
+         "shorttext": "ls",
+         "longtext": "list",
+         "jumptomenulevel": "",
+         "defaultdisplayorder": 111,
+         "requirementcheck": "CheckAPIList()",
+         "functionName": "ShowAPIList()",
+         "helptextorfile": "List all available APIs"
+
+      },
+      {
+         "id": "setactiveplugin",
+         "shorttext": "set",
+         "longtext": "set-active",
+         "jumptomenulevel": "",
+         "defaultdisplayorder": 222,
+         "requirementcheck": "CheckAPIList()",
+         "functionName": "SetActivePlugin([0])",
+         "helptextorfile": "setactiveplugin.txt"
+
+      },
+      {
+         "id": "runactiveplugin",
+         "shorttext": "run",
+         "longtext": "run-active",
+         "jumptomenulevel": "",
+         "defaultdisplayorder": 333,
+         "requirementcheck": "CheckAPIList()",
+         "functionName": "RunActivePlugin()",
+         "helptextorfile": "runactiveplugin.txt"
+
+      },
+      {
+         "id": "hlpmnuitem",
+         "shorttext": "?",
+         "longtext": "help",
+         "jumptomenulevel": "",
+         "defaultdisplayorder": 55555,
+         "requirementcheck": "CheckHelpMenuVisible()",
+         "functionName": "ShowHelp([*])",
+         "helptextorfile": "Help Me Help You :)"
+      },
+      {
+         "id": "versionmenuitem",
+         "shorttext": "v",
+         "longtext": "version",
+         "jumptomenulevel": "",
+         "defaultdisplayorder": 55555,
+         "requirementcheck": "CheckHelpMenuVisible()",
+         "functionName": "ShowHelp([*])",
+         "helptextorfile": "help_versionmenuitem.txt"
+      },
+      {
+         "id": "editmenuadmin",
+         "shorttext": "aedit",
+         "longtext": "edit-menu",
+         "jumptomenulevel": "4",
+         "defaultdisplayorder": 555,
+         "requirementcheck": "CheckUserIsAdmin()",
+         "functionName": "",
+         "helptextorfile": "editmenuadmin.txt"
+      },
+      {
+         "id": "exitcli",
+         "shorttext": "x",
+         "longtext": "exit",
+         "jumptomenulevel": "-1",
+         "defaultdisplayorder": 999999,
+         "requirementcheck": "",
+         "functionName": "ExitApp()",
+         "helptextorfile": ""
+      }
+   ]
+}
